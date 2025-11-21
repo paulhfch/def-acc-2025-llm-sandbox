@@ -3,8 +3,9 @@ import { t } from '@extension/i18n';
 import { PROJECT_URL_OBJECT, useStorage, withErrorBoundary, withSuspense } from '@extension/shared';
 import { exampleThemeStorage } from '@extension/storage';
 import { cn, ErrorDisplay, LoadingSpinner, ToggleButton } from '@extension/ui';
-import { ChatCompletionMessageParam, ExtensionServiceWorkerMLCEngine } from '@mlc-ai/web-llm';
+import { ExtensionServiceWorkerMLCEngine } from '@mlc-ai/web-llm';
 import { useEffect } from 'react';
+import type { ChatCompletionMessageParam } from '@mlc-ai/web-llm';
 
 const SidePanel = () => {
   const { isLight } = useStorage(exampleThemeStorage);
@@ -15,6 +16,7 @@ const SidePanel = () => {
   // TEST
   useEffect(() => {
     loadWebllmEngine();
+    retrieveTabContents();
   }, []);
 
   const engine = new ExtensionServiceWorkerMLCEngine({
@@ -35,6 +37,17 @@ const SidePanel = () => {
       temperature: options['temperature'],
     });
     console.log('Engine loaded.');
+  }
+
+  // eslint-disable-next-line func-style
+  function retrieveTabContents() {
+    console.log('Retrieving tab contents...');
+    
+    chrome.runtime.sendMessage({ action: 'COLLECT_ALL_TABS' }, response => {
+      // todo: show tab titles in the side panel
+      const tabTitles = response.tabs.map(tab => tab.title);
+      console.log('Titles:', tabTitles);
+    });
   }
 
   // eslint-disable-next-line func-style
@@ -63,7 +76,7 @@ const SidePanel = () => {
   return (
     <div className={cn('App', isLight ? 'bg-slate-50' : 'bg-gray-800')}>
       <header className={cn('App-header', isLight ? 'text-gray-900' : 'text-gray-100')}>
-        <ToggleButton onClick={async () => await testPrompt()}>Test Prompt</ToggleButton>
+        <ToggleButton onClick={async () => await testPrompt()}>My Prompt</ToggleButton>
       </header>
     </div>
   );

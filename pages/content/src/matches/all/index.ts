@@ -1,7 +1,13 @@
-import { sampleFunction } from '@src/sample-function';
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+  console.log('[content] Received message:', msg);
 
-console.log('[CEB] All content script loaded');
+  if (msg.action === "GET_TAB_CONTENT") {
+    const title = document.title;
+    const text = document.body.innerText || "";
 
-void sampleFunction();
+    // console.log('[content] Sending response:', { title, text });
+    sendResponse({ title, text });
+  }
 
-// TODO: retrieve webpage content from all tabs: {"tab_title": "text content"}
+  return true;
+});
