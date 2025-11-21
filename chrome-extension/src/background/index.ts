@@ -1,9 +1,17 @@
-import 'webextension-polyfill';
-import { exampleThemeStorage } from '@extension/storage';
+import { ExtensionServiceWorkerMLCEngineHandler } from "@mlc-ai/web-llm";
 
-exampleThemeStorage.get().then(theme => {
-  console.log('theme', theme);
+let webllmHandler: ExtensionServiceWorkerMLCEngineHandler;
+
+chrome.runtime.onConnect.addListener(function (port) {
+  if (webllmHandler === undefined) {
+    webllmHandler = new ExtensionServiceWorkerMLCEngineHandler(port);
+  } else {
+    webllmHandler.setPort(port);
+  }
+  port.onMessage.addListener(webllmHandler.onmessage.bind(webllmHandler));
 });
 
-console.log('Background loaded');
-console.log("Edit 'chrome-extension/src/background/index.ts' and save to reload.");
+// Show side panel on button click
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });
+});

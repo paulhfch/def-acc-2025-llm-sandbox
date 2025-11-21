@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@mlc-ai/web-llm':
+        specifier: ^0.2.76
+        version: 0.2.79
       react:
         specifier: ^19.1.0
         version: 19.1.1
@@ -150,6 +153,9 @@ importers:
       '@extension/storage':
         specifier: workspace:*
         version: link:../packages/storage
+      '@mlc-ai/web-llm':
+        specifier: ^0.2.76
+        version: 0.2.79
       webextension-polyfill:
         specifier: ^0.12.0
         version: 0.12.0
@@ -1044,6 +1050,9 @@ packages:
     resolution: {integrity: sha512-rmiy9yreGSrzU5HEMGX1gbQ9nA03I/3YaOpmwB1dOMEYT44ijyN6QD0VJ8bUNC2BA/fd1pYCkkgr2eFlvo0G2Q==}
     peerDependencies:
       vite: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0
+
+  '@mlc-ai/web-llm@0.2.79':
+    resolution: {integrity: sha512-Hy1ZHQ0o2bZGZoVnGK48+fts/ZSKwLe96xjvqL/6C59Mem9HoHTcFE07NC2E23mRmhd01tL655N6CPeYmwWgwQ==}
 
   '@napi-rs/wasm-runtime@0.2.12':
     resolution: {integrity: sha512-ZVWUcfwY4E/yPitQJl481FjFo3K22D6qF0DuFH6Y/nbnE11GY5uguDxZMGXPQ8WQ0128MXQD7TnfHyK4oWoIJQ==}
@@ -5458,6 +5467,10 @@ snapshots:
       mrmime: 1.0.1
       semver: 7.7.2
       vite: 6.3.6(@types/node@24.3.1)(jiti@2.5.1)(sass@1.92.1)(terser@5.44.0)(tsx@4.20.5)(yaml@2.8.1)
+
+  '@mlc-ai/web-llm@0.2.79':
+    dependencies:
+      loglevel: 1.9.2
 
   '@napi-rs/wasm-runtime@0.2.12':
     dependencies:

@@ -38,7 +38,8 @@ const manifest = {
     type: 'module',
   },
   action: {
-    default_popup: 'popup/index.html',
+    // default_popup: 'popup/index.html',
+    default_title: 'LLM Sandbox',
     default_icon: 'icon-34.png',
   },
   chrome_url_overrides: {
@@ -69,6 +70,10 @@ const manifest = {
       css: ['content.css'],
     },
   ],
+  content_security_policy: {
+    extension_pages:
+      "style-src-elem 'self' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; script-src 'self' 'wasm-unsafe-eval'; default-src 'self' data:; connect-src 'self' data: http://localhost:8000 https://huggingface.co https://cdn-lfs.huggingface.co https://cdn-lfs-us-1.huggingface.co https://raw.githubusercontent.com https://cdn-lfs-us-1.hf.co/ https://www.googleapis.com/ https://cas-bridge.xethub.hf.co",
+  },
   devtools_page: 'devtools/index.html',
   web_accessible_resources: [
     {
