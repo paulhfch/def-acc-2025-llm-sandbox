@@ -1,17 +1,23 @@
 import '@src/SidePanel.css';
-import { t } from '@extension/i18n';
 import { PROJECT_URL_OBJECT, useStorage, withErrorBoundary, withSuspense } from '@extension/shared';
 import { exampleThemeStorage } from '@extension/storage';
 import { cn, ErrorDisplay, LoadingSpinner, ToggleButton } from '@extension/ui';
 import { ExtensionServiceWorkerMLCEngine } from '@mlc-ai/web-llm';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import type { ChatCompletionMessageParam } from '@mlc-ai/web-llm';
+import CheckboxList from './CheckboxList';
+import { engine } from './Engine';
 
 const SidePanel = () => {
   const { isLight } = useStorage(exampleThemeStorage);
   const logo = isLight ? 'side-panel/logo_vertical.svg' : 'side-panel/logo_vertical_dark.svg';
-
   const goGithubSite = () => chrome.tabs.create(PROJECT_URL_OBJECT);
+
+  const [llmReady, setLlmReady] = useState(false);
+  const [tabContents, setTabContents] = useState([]);
+  const [selectedTabs, setSelectedTabs] = useState([]);
+  const [userPrompt, setUserPrompt] = useState('');
+  const [llmResponse, setLlmResponse] = useState('');
 
   // TEST
   useEffect(() => {
@@ -19,17 +25,11 @@ const SidePanel = () => {
     retrieveTabContents();
   }, []);
 
-  const engine = new ExtensionServiceWorkerMLCEngine({
-    initProgressCallback: progress => {
-      console.log(progress.text);
-    },
-  });
-
   // eslint-disable-next-line func-style
   async function loadWebllmEngine() {
     const options = await chrome.storage.sync.get({
       temperature: 0.5,
-      contextLength: 4096,
+      contextLength: 40960,
       model: 'Llama-3.2-3B-Instruct-q4f16_1-MLC',
     });
     await engine.reload(options['model'], {
@@ -37,24 +37,28 @@ const SidePanel = () => {
       temperature: options['temperature'],
     });
     console.log('Engine loaded.');
+    setLlmReady(true);
   }
 
   // eslint-disable-next-line func-style
   function retrieveTabContents() {
     console.log('Retrieving tab contents...');
-    
+
     chrome.runtime.sendMessage({ action: 'COLLECT_ALL_TABS' }, response => {
-      // todo: show tab titles in the side panel
-      const tabTitles = response.tabs.map(tab => tab.title);
-      console.log('Titles:', tabTitles);
+      console.log('Received tab contents:', response.tabs);
+      const tabsWithIds = response.tabs.map((tab, index) => ({ ...tab, id: index }));
+      setTabContents(tabsWithIds);
     });
   }
 
   // eslint-disable-next-line func-style
-  async function testPrompt() {
+  async function runPrompt(userPrompt: string) {
+    const tabContents = selectedTabs.map(tab => `Title: ${tab.title}\nContent: ${tab.text}`).join('\n\n');    
+    console.log('Running prompt with tab contents:', tabContents);
+    
     const messages: ChatCompletionMessageParam[] = [
       { role: 'system', content: 'You are a helpful assistant.' },
-      { role: 'user', content: 'What is the capital of France?' },
+      { role: 'user', content: tabContents + "\n" + userPrompt },
     ];
     const completion = await engine.chat.completions.create({
       stream: true,
@@ -69,15 +73,19 @@ const SidePanel = () => {
         curMessage += curDelta;
       }
 
-      console.log('Current message:', curMessage);
+      setLlmResponse(curMessage);
     }
   }
 
   return (
     <div className={cn('App', isLight ? 'bg-slate-50' : 'bg-gray-800')}>
-      <header className={cn('App-header', isLight ? 'text-gray-900' : 'text-gray-100')}>
-        <ToggleButton onClick={async () => await testPrompt()}>My Prompt</ToggleButton>
-      </header>
+      <h1>LLM SandBox</h1>
+      <p>{llmReady ? 'LLM is ready' : 'Loading LLM...'}</p>
+      <CheckboxList items={tabContents} onChange={tabs => setSelectedTabs(tabs)} />
+      <textarea className="w-full rounded-xl border p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+ rows={5} placeholder="User Prompt" value={userPrompt} onChange={e => setUserPrompt(e.target.value)} />
+      <textarea className="w-full rounded-xl border p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" rows={10} placeholder="LLM Response" value={llmResponse} readOnly />
+      <ToggleButton disabled={!llmReady} onClick={async () => await runPrompt(userPrompt)}>Dry run</ToggleButton>
     </div>
   );
 };
