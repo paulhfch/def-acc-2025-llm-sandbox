@@ -123,6 +123,7 @@ const SidePanel = () => {
         stream: true,
         messages,
         temperature: 0.8,
+        max_tokens: 2048,
       });
 
       let curMessage = '';
@@ -135,7 +136,7 @@ const SidePanel = () => {
         setLlmResponse(curMessage);
       }
 
-      await evaluateResponse(userPrompt, curMessage);
+      await evaluateResponse(userPrompt, tabContents, curMessage);
     } catch (error) {
       console.error('Error running prompt:', error);
       setLlmResponse('Error: Failed to generate response. Please try again.');
@@ -151,20 +152,51 @@ const SidePanel = () => {
     setIsGenerating(false);
   }
 
-  async function evaluateResponse(originalPrompt: string, response: string) {
+  async function evaluateResponse(originalInstruction: string, context: string, response: string) {
     const messages: ChatCompletionMessageParam[] = [
       { role: 'system', content: PromptBuilder.evalSystemPrompt },
-      { role: 'user', content: PromptBuilder.buildEvalUserPrompt(originalPrompt, response) },
+      { role: 'user', content: PromptBuilder.buildEvalUserPrompt(originalInstruction, context, response) },
     ];
+
+    console.log('Evaluation Messages: ' + JSON.stringify(messages));
+
     const completion = await engine.chat.completions.create({
       stream: false,
       messages,
-      temperature: 0.2,
+      temperature: 0.8,
+      response_format: {
+        type: 'json_schema',
+        json_schema: {
+          name: 'attack_results',
+          schema: {
+            type: 'object',
+            properties: {
+              results: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    summary: { type: 'string' },
+                    description: { type: 'string' },
+                  },
+                  required: ['summary', 'description'],
+                  additionalProperties: false,
+                },
+              },
+            },
+            required: ['results'],
+            additionalProperties: false,
+          },
+          strict: true,
+        },
+      },
     });
 
     const evaluationResult = completion.choices[0].message?.content || '';
-    setEvaluationResult(evaluationResult);
     console.log('Evaluation Result:', evaluationResult);
+
+    const evaluationResultJson = JSON.parse(evaluationResult);
+    setEvaluationResult(evaluationResultJson.results);
   }
 
   function copyToClipboard(text: string) {
@@ -182,8 +214,7 @@ const SidePanel = () => {
       {evaluationResult &&
         (() => {
           try {
-            const items = JSON.parse(evaluationResult);
-            return <RiskReport items={Array.isArray(items) ? items : []} />;
+            return <RiskReport items={Array.isArray(evaluationResult) ? evaluationResult : []} />;
           } catch {
             return null;
           }
