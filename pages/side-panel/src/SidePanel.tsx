@@ -15,8 +15,8 @@ const SidePanel = () => {
 
   const availableModels = [
     'Llama-3.2-3B-Instruct-q4f16_1-MLC',
-    'SmolLM2-1.7B-Instruct-q0f16-MLC',
-    'Qwen2-1.5B-Instruct-q0f16-MLC',
+    'SmolLM2-1.7B-Instruct-q4f16_1-MLC',
+    'SmolLM2-360M-Instruct-q4f32_1-MLC',
   ];
 
   const [currentModel, setCurrentModel] = useState('');
