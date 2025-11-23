@@ -40,7 +40,7 @@ const manifest = {
   action: {
     // default_popup: 'popup/index.html',
     default_title: 'LLM Sandbox',
-    default_icon: 'icon-34.png',
+    default_icon: 'icon.png',
   },
   // chrome_url_overrides: {
   //   newtab: 'new-tab/index.html',
@@ -77,7 +77,7 @@ const manifest = {
   devtools_page: 'devtools/index.html',
   web_accessible_resources: [
     {
-      resources: ['*.js', '*.css', '*.svg', '*.ttf', '*.woff', '*.woff2', 'icon-128.png', 'icon-34.png'],
+      resources: ['*.js', '*.css', '*.svg', '*.ttf', '*.woff', '*.woff2', 'icon.png'],
       matches: ['*://*/*'],
     },
   ],

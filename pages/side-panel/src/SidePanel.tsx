@@ -163,7 +163,7 @@ const SidePanel = () => {
     const completion = await engine.chat.completions.create({
       stream: false,
       messages,
-      temperature: 0.8,
+      temperature: 0.1,
       response_format: {
         type: 'json_schema',
         json_schema: {
@@ -179,7 +179,7 @@ const SidePanel = () => {
                     summary: { type: 'string' },
                     description: { type: 'string' },
                   },
-                  required: ['summary', 'description'],
+                  // required: ['summary', 'description'],
                   additionalProperties: false,
                 },
               },
