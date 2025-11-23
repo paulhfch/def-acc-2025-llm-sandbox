@@ -362,7 +362,7 @@ const SidePanel = () => {
             disabled={!llmReady || isGenerating || llmFailed}
             onClick={async () => await runPrompt(userPrompt)}
             className="safety-dig-button-shadow w-full rounded-full border border-[#948872] bg-[#5C5547] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#4a4438] disabled:cursor-not-allowed disabled:opacity-50">
-            Run Safety Dig
+            Start Dry Run
           </button>
         </div>
       )}
@@ -373,7 +373,7 @@ const SidePanel = () => {
           <button
             disabled
             className="safety-dig-button-shadow w-full rounded-full border border-[#948872] bg-[#807E76] px-6 py-3 font-semibold text-white transition-colors disabled:cursor-not-allowed">
-            Digging in Progress...
+            Dry Run in Progress...
           </button>
         </div>
       )}

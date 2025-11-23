@@ -36,7 +36,7 @@ export default function RiskReport({ items }: RiskReportProps) {
   return (
     <div className="mb-6">
       <div className="card-shadow card-border mb-4 rounded-xl bg-white p-4">
-        <h1 className="text-red text-center text-3xl font-bold">POISONED</h1>
+        <h1 className="text-red text-center text-3xl font-bold">WARNING</h1>
       </div>
 
       <div className="space-y-3">
