@@ -35,7 +35,8 @@
     "copy-env": "bash bash-scripts/copy_env.sh",
     "set-global-env": "bash bash-scripts/set_global_env.sh",
     "module-manager": "pnpm -F module-manager start",
-    "postinstall": "pnpm copy-env"
+    "postinstall": "pnpm copy-env",
+    "serve-tests": "npx http-server ./tests/www"
   },
   "dependencies": {
     "react": "^19.1.0",
@@ -83,7 +84,8 @@
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.32.1",
     "vite": "^6.3.6",
-    "vite-plugin-node-polyfills": "^0.23.0"
+    "vite-plugin-node-polyfills": "^0.23.0",
+    "http-server": "^14.1.1"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json}": [
