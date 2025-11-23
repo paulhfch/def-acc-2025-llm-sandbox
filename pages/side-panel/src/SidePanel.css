@@ -1,12 +1,15 @@
+/* Font-face will be injected via JavaScript */
+
 .App {
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  text-align: center;
   height: 100%;
   padding: 1rem;
+  overflow-y: auto;
+  font-family: 'Fustat', sans-serif;
 }
 
 .App-logo {
@@ -27,4 +30,95 @@ code {
   background: rgba(148, 163, 184, 0.5);
   border-radius: 0.25rem;
   padding: 0.2rem 0.5rem;
+}
+
+.card-shadow {
+  box-shadow: inset 0 4px 20px 0 rgba(132, 121, 81, 0.25);
+}
+
+.button-inner-shadow {
+  box-shadow: 
+    inset 3px 1px 4px 0 rgba(0, 0, 0, 0.2),
+    inset -5px -5px 4px 0 rgba(255, 255, 255, 0.8);
+}
+
+.load-button-shadow {
+  box-shadow: 
+    inset 3px 1px 4px 0 rgba(0, 0, 0, 0.2),
+    inset -5px -5px 4px 0 rgba(255, 255, 255, 0.4);
+}
+
+.safety-dig-button-shadow {
+  box-shadow: 
+    inset 5px -10px 4px 0 rgba(0, 0, 0, 0.5),
+    inset -5px 5px 10px 0 rgba(255, 238, 188, 0.5);
+}
+
+.bg-light-base {
+  background-color: #E7E6D7 !important;
+}
+
+.card-border {
+  border: 1px solid #726A5A;
+}
+
+.checkbox-shadow {
+  box-shadow: inset 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+}
+
+input[type="checkbox"].checkbox-shadow {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #726A5A;
+}
+
+.risk-accordion-shadow {
+  box-shadow: 
+    inset 3px 1px 4px 0 rgba(0, 0, 0, 0.2),
+    inset -5px 5px 10px 0 rgba(168, 185, 174, 0.8);
+}
+
+.risk-x-icon-bg {
+  box-shadow: 
+    inset 3px 1px 4px 0 rgba(0, 0, 0, 0.2),
+    inset -5px -5px 4px 0 rgba(255, 255, 255, 0.8);
+}
+
+.text-red {
+  color: #C55656 !important;
+}
+
+.bg-red {
+  background-color: #C55656 !important;
+}
+
+.bg-green {
+  background-color: #16AB98 !important;
+}
+
+.bg-yellow {
+  background-color: #DF9F45 !important;
+}
+
+.text-green {
+  color: #16AB98 !important;
+}
+
+.text-yellow {
+  color: #DF9F45 !important;
+}
+
+/* Overlay text for Generate LLM Response textarea */
+.llm-response-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  text-align: center;
+  font-size: 1.125rem;
+  color: #726A5A;
+  z-index: 1;
 }
